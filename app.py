@@ -81,15 +81,20 @@ if image_source is not None:
         st.image(preview, caption="Imagen procesada (28x28, invertida)", width=200)
 
     prediction, distances, neighbor_idx, confidence, votes = predict_digit(model, image_array, k)
+    neighbor_labels = model._y[neighbor_idx]
 
     st.divider()
     st.subheader("Resultado")
     st.metric(label="Dígito predicho", value=str(prediction))
-    st.progress(confidence, text=f"Confianza (votos de los {k} vecinos): {confidence * 100:.0f}%")
-
+    st.progress(
+    float(confidence),
+    text=f"Confianza (votos de los {k} vecinos): {float(confidence) * 100:.0f}%"
+)
     with st.expander("Detalles técnicos de la predicción"):
-        st.write(f"**Distancias euclidianas a los {k} vecinos más cercanos:**")
+        st.write(f"**Vecinos más cercanos:** {neighbor_labels}")
+        st.write(f"**Distancias euclidianas:**")
         st.write(np.round(distances, 2))
+
         st.write("**Votos por clase (0-9):**")
         st.bar_chart(votes)
 else:
