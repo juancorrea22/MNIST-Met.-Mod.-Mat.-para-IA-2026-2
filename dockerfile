@@ -11,5 +11,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia el código fuente y scripts al contenedor
 COPY . .
 
-# Comando para ejecutar tu script principal (reemplaza main.py por el nombre de tu archivo)
-CMD ["python", "main.py"]
+# Puerto por defecto de Streamlit
+EXPOSE 8501
+
+# Corre la interfaz web. --server.address=0.0.0.0 es necesario para que
+# sea accesible desde fuera del contenedor (por ejemplo, desde el celular
+# en la misma red durante la demo).
+CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501"]
