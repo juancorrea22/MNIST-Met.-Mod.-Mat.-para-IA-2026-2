@@ -3,3 +3,6 @@ scikit-learn
 pandas
 Pillow
 streamlit
+matplotlib
+seaborn
+scipy

@@ -1,5 +1,4 @@
 """
-app.py
 Interfaz web para clasificación de dígitos MNIST.
 
 Uso en la demo en vivo:
@@ -10,8 +9,7 @@ Uso en la demo en vivo:
 3. La app preprocesa la imagen (escala de grises, 28x28, inversión de colores,
    normalización) y el modelo KNN entrenado con MNIST predice el dígito.
 4. Se muestra la predicción, el nivel de confianza (votos de los k vecinos)
-   y una vista de cómo quedó la imagen luego del preprocesamiento (para que
-   el jurado entienda por qué el modelo "ve" lo que ve).
+   y una vista de cómo quedó la imagen luego del preprocesamiento.
 
 Ejecutar localmente:
     streamlit run app.py

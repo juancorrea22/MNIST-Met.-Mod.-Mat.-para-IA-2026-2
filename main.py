@@ -1,6 +1,5 @@
 """
-main.py
--------
+
 Versión de línea de comandos (CLI) del clasificador de dígitos MNIST.
 Útil para pruebas rápidas por consola. Para la demo en vivo con cámara,
 usar 'streamlit run app.py' (ver README.md).

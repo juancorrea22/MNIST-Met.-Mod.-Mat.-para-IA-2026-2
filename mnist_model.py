@@ -1,9 +1,6 @@
 """
-mnist_model.py
-----------------
-Clasificador KNN de dígitos manuscritos.
+Clasificador KNN de dígitos escritos a mano.
 
-Esta versión:
 - carga MNIST
 - normaliza las imágenes
 - extrae características de forma/bordes
@@ -19,11 +16,7 @@ from scipy import ndimage
 from sklearn.datasets import fetch_openml
 from sklearn.neighbors import KNeighborsClassifier
 
-
-# ==========================================================
 # NORMALIZACIÓN DEL DÍGITO
-# ==========================================================
-
 def normalize_digit(digit: np.ndarray) -> np.ndarray:
     """
     Recibe un dígito blanco sobre fondo negro
@@ -35,13 +28,13 @@ def normalize_digit(digit: np.ndarray) -> np.ndarray:
     if digit.max() > 0:
         digit = digit / digit.max()
 
-    # Detectar dónde realmente hay contenido
+    #detectar dónde realmente hay contenido
     coords = np.argwhere(digit > 0.08)
 
     if coords.size == 0:
         return np.zeros((28, 28), dtype=np.float32)
 
-    # Límites del dígito
+    #límites del dígito
     y_min, x_min = coords.min(axis=0)
     y_max, x_max = coords.max(axis=0)
 
@@ -124,10 +117,7 @@ def normalize_digit(digit: np.ndarray) -> np.ndarray:
         1
     )
 
-
-# ==========================================================
 # EXTRACCIÓN DE CARACTERÍSTICAS
-# ==========================================================
 
 def extract_features(image_28x28: np.ndarray) -> np.ndarray:
     """
@@ -169,11 +159,8 @@ def extract_features(image_28x28: np.ndarray) -> np.ndarray:
         + np.pi
     ) % np.pi
 
-    # --------------------------------------------------
     # Dividir 28x28 en 4x4 celdas de 7x7
     # Cada celda tendrá 9 orientaciones
-    # --------------------------------------------------
-
     features = []
 
     number_of_bins = 9
@@ -241,11 +228,7 @@ def extract_features(image_28x28: np.ndarray) -> np.ndarray:
         dtype=np.float32
     )
 
-
-# ==========================================================
 # CARGA DEL DATASET MNIST
-# ==========================================================
-
 def load_mnist_subset(
     samples_per_class: int = 500,
     seed: int = 42
@@ -339,10 +322,7 @@ def load_mnist_subset(
     )
 
 
-# ==========================================================
 # ENTRENAMIENTO KNN
-# ==========================================================
-
 def train_knn(
     train_features,
     train_labels,
@@ -367,11 +347,7 @@ def train_knn(
 
     return model
 
-
-# ==========================================================
 # PREPROCESAMIENTO DE FOTOGRAFÍAS
-# ==========================================================
-
 def preprocess_image(
     pil_image: Image.Image
 ) -> np.ndarray:
@@ -390,10 +366,7 @@ def preprocess_image(
         dtype=np.float32
     )
 
-    # --------------------------------------------------
     # Estimar iluminación del papel
-    # --------------------------------------------------
-
     background = ndimage.gaussian_filter(
         original,
         sigma=15
@@ -413,10 +386,7 @@ def preprocess_image(
             / digit.max()
         )
 
-    # --------------------------------------------------
     # Detectar trazo
-    # --------------------------------------------------
-
     mask = digit > 0.12
 
     # Unir pequeños huecos
@@ -428,10 +398,7 @@ def preprocess_image(
         )
     )
 
-    # --------------------------------------------------
     # Componentes conectados
-    # --------------------------------------------------
-
     labeled, count = ndimage.label(
         mask
     )
@@ -482,10 +449,7 @@ def preprocess_image(
     )
 
 
-# ==========================================================
 # CONVERSIÓN DE IMAGEN A FEATURES
-# ==========================================================
-
 def _to_features(
     image_array: np.ndarray
 ) -> np.ndarray:
@@ -508,11 +472,7 @@ def _to_features(
         -1
     )
 
-
-# ==========================================================
 # PREDICCIÓN
-# ==========================================================
-
 def predict_digit(
     model: KNeighborsClassifier,
     image_array: np.ndarray,
@@ -550,11 +510,8 @@ def predict_digit(
     neighbor_labels = model._y[
         neighbor_indices
     ]
-
-    # --------------------------------------------------
+    
     # Voto ponderado por distancia
-    # --------------------------------------------------
-
     weights = 1.0 / (
         distances + 1e-8
     )
